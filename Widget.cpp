@@ -36,11 +36,13 @@ Widget::~Widget()
 void Widget::initMenuLabelTBtn()
 {
     menu=new QMenu(this);
-    QAction* act1 = menu->addAction(QIcon("://imag/aaa.png"),"标准");
-    //menu->addSeparator();
-    QAction* act2 = menu->addAction(QIcon("://imag/bbb.png"),"科学");
-    connect(act1,&QAction::triggered,this,&Widget::keyboard);
-    connect(act2,&QAction::triggered,this,&Widget::scKeyboard);
+    QAction* act1 = menu->addAction(QIcon("://imag/aaa.png"),"标准",this,&Widget::keyboard);
+
+    menu->addSeparator();
+    QAction* act2 = menu->addAction(QIcon("://imag/bbb.png"),"科学",this,&Widget::scKeyboard);
+
+    //connect(act1,&QAction::triggered,this,&Widget::keyboard);
+    //connect(act2,&QAction::triggered,this,&Widget::scKeyboard);
     tBtn=new QToolButton(this);
     tBtn->setText("≡");
     tBtn->setStyleSheet("border:none;");
@@ -143,6 +145,7 @@ void Widget::OnClicked(BtnType _type,QString _btn)
                 if(mNum1.isEmpty()) mNum1="0" + _btn;
                 else if(!mNum1.isEmpty() && !mNum1.contains("."))
                 {
+                    if(mNum1.toDouble()==0) mNum1="0";//排除00的可能
                     mNum1 += _btn;
                 }
 
@@ -297,13 +300,14 @@ void Widget::initKeyboard()
                 });
                 connect(btn,&MyPushButton::press,btn,[btn](){btn->setFlat(true);});//去边框;
             }
-            else if(i<=7 || (i%4==3 && 4!=i/4)) btn->setStyleSheet("QPushButton{background-color: rgb(230, 230, 230);}\
-                                                                             QPushButton:hover{background-color: rgb(200, 200, 200);}\
-                                                                             QPushButton:pressed{ background-color: rgb(150, 150, 150); }");
-            else if(4==i/4 && 3==i%4) btn->setStyleSheet("QPushButton{background-color: rgb(100, 200, 100); }\
+            else if(i<=7 || (i%4==3 && 4!=i/4)) btn->setStyleSheet("QPushButton{border:none;background-color: rgb(230, 230, 230);}\
+                                        QPushButton:hover{background-color: rgb(200, 200, 200);}\
+                                        QPushButton:pressed{ background-color: rgb(150, 150, 150); }");
+
+            else if(4==i/4 && 3==i%4) btn->setStyleSheet("QPushButton{border:none;background-color: rgb(100, 200, 100); }\
                                 QPushButton:hover{background-color: rgb(83, 176, 76);}\
                                 QPushButton:pressed{ background-color: rgb(56, 131, 54); }");
-            else btn->setStyleSheet("QPushButton{background-color: rgb(255, 255, 255);}\
+            else btn->setStyleSheet("QPushButton{border:none;background-color: rgb(250, 250, 250);}\
                                      QPushButton:hover{background-color: rgb(200, 200, 200);}\
                                      QPushButton:pressed{ background-color: rgb(150, 150, 150); }");
             btnList.append(btn);
@@ -380,19 +384,19 @@ void Widget::initScientificKeyboard()
                 btn->setFlat(true);//去掉边框;//btn->setStyleSheet("border:none;");
                 connect(btn,&MyPushButton::hover,btn,[btn](){
                     btn->setFlat(false);//加边框;
-                    btn->setStyleSheet("QPushButton{background-color: rgb(255, 255, 255);}\
+                    btn->setStyleSheet("QPushButton{border:none;background-color: rgb(255, 255, 255);}\
                                         QPushButton:hover{background-color: rgb(200, 200, 200);}\
                                         QPushButton:pressed{ background-color: rgb(150, 150, 150); }");
                 });
                 connect(btn,&MyPushButton::press,btn,[btn](){btn->setFlat(true);});//去边框;
             }
-            else if(42==i) btn->setStyleSheet("QPushButton{background-color: rgb(100, 200, 100); }\
+            else if(42==i) btn->setStyleSheet("QPushButton{border:none;background-color: rgb(100, 200, 100); }\
                                 QPushButton:hover{background-color: rgb(83, 176, 76);}\
                                 QPushButton:pressed{ background-color: rgb(56, 131, 54); }");
-            else if((i-8)/5>2 && (i-8)%5>0 && (i-8)%5<4) btn->setStyleSheet("QPushButton{background-color: rgb(255, 255, 255);}\
+            else if((i-8)/5>2 && (i-8)%5>0 && (i-8)%5<4) btn->setStyleSheet("QPushButton{border:none;background-color: rgb(250, 250, 250);}\
                                                                             QPushButton:hover{background-color: rgb(200, 200, 200);}\
                                                                             QPushButton:pressed{ background-color: rgb(150, 150, 150); }");
-            else if(42!=i) btn->setStyleSheet("QPushButton{background-color: rgb(230, 230, 230);}\
+            else if(42!=i) btn->setStyleSheet("QPushButton{border:none;background-color: rgb(230, 230, 230);}\
                                      QPushButton:hover{background-color: rgb(200, 200, 200);}\
                                      QPushButton:pressed{ background-color: rgb(150, 150, 150); }");
             btnScList.append(btn);
